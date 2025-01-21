@@ -13,9 +13,8 @@ public class Book
     
     [Required]
     public string Author { get; set; }
-    
-    [Required]
-    public Status Status { get; set; }
+
+    [Required] public Status Status { get; set; } = Status.Available;
     
     public Borrowing Borrowing { get; set; }
 }

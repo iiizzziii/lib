@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lib.api", "lib.api\lib.api.csproj", "{62C145D5-1FDF-4A2D-8BEB-EC37A251776E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lib.xunit", "lib.xunit\lib.xunit.csproj", "{588AA4D8-D7ED-41CF-9E7A-4F0206550345}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{62C145D5-1FDF-4A2D-8BEB-EC37A251776E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62C145D5-1FDF-4A2D-8BEB-EC37A251776E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62C145D5-1FDF-4A2D-8BEB-EC37A251776E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62C145D5-1FDF-4A2D-8BEB-EC37A251776E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{588AA4D8-D7ED-41CF-9E7A-4F0206550345}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{588AA4D8-D7ED-41CF-9E7A-4F0206550345}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{588AA4D8-D7ED-41CF-9E7A-4F0206550345}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{588AA4D8-D7ED-41CF-9E7A-4F0206550345}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

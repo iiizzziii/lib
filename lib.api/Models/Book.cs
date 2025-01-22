@@ -19,7 +19,7 @@ public class Book
     [Required] 
     public Status Status { get; set; } = Status.Available;
     
-    public Borrowing Borrowing { get; set; }
+    public ICollection<Borrowing> Borrowings { get; set; }
 }
 
 [JsonConverter(typeof(JsonStringEnumConverter))]

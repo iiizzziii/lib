@@ -54,8 +54,8 @@ public class AppDbContext(
                 .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(b => b.Book)
-                .WithOne(b => b.Borrowing)
-                .HasForeignKey<Borrowing>(b => b.BookId)
+                .WithMany(b => b.Borrowings)
+                .HasForeignKey(b => b.BookId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
     }

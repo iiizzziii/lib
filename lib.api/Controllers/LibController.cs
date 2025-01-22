@@ -74,6 +74,10 @@ public class LibController(AppDbContext dbContext) : ControllerBase
 
             return Ok($"book {id} deleted successfully");
         }
+        catch (DbUpdateConcurrencyException)
+        {
+            return NotFound($"book with id: {id} not found");
+        }
         catch (Exception e) { Console.WriteLine(e); throw; }
     }
 
@@ -88,17 +92,41 @@ public class LibController(AppDbContext dbContext) : ControllerBase
         var user = await dbContext.Users.FindAsync(request.UserId);
         if (user == null) return NotFound($"user with id: {request.UserId} not found");
 
-        var newBorrowing = new Borrowing
+        try
         {
-            UserId = request.UserId,
-            BookId = request.BookId,
-            DateCreated = DateTime.Now,
-            DateDue = DateTime.Today.AddDays(request.Duration),
-        };
+            var newBorrowing = new Borrowing
+            {
+                UserId = request.UserId,
+                BookId = request.BookId,
+                DateCreated = DateTime.Now,
+                DateDue = DateTime.Today.AddDays(request.Duration),
+            };
+            book.Status = Status.Borrowed;
+            
+            await dbContext.Borrowings.AddAsync(newBorrowing);
+            await dbContext.SaveChangesAsync();
 
-        await dbContext.Borrowings.AddAsync(newBorrowing);
-        await dbContext.SaveChangesAsync();
+            return Ok($"user {user.Email} borrowed {book.Title} until {newBorrowing.DateDue}");
+        }
+        catch (Exception e) { Console.WriteLine(e); throw; }
+    }
 
-        return Ok($"{user.Email} borrowed {book.Title} until {newBorrowing.DateDue}");
+    [HttpPut("return/{id:int}")]
+    public async Task<IActionResult> Return(int id)
+    {
+        var borrowing = await dbContext.Borrowings
+            .Include(b => b.Book)
+            .FirstOrDefaultAsync(b => b.Id == id);
+        if (borrowing == null) return NotFound($"borrowing with id: {id} not found");
+
+        try
+        {
+            borrowing.Book.Status = Status.Available;
+            borrowing.BorrowStatus = BorrowStatus.Returned;
+            await dbContext.SaveChangesAsync();
+
+            return Ok($"{borrowing.Book.Title} returned");
+        }
+        catch (Exception e) { Console.WriteLine(e); throw; }
     }
 }

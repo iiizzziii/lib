@@ -38,7 +38,7 @@ public class AppDbContext(
                     Id = 2,
                     Title = "Book 2",
                     Author = "Author 2",
-                    Status = Status.Borrowed, });
+                    Status = Status.Available, });
         });
 
         modelBuilder.Entity<Borrowing>(entity =>
@@ -46,6 +46,7 @@ public class AppDbContext(
             entity.HasKey(b => b.Id);
             entity.Property(b => b.DateCreated).IsRequired();
             entity.Property(b => b.DateDue).IsRequired();
+            entity.Property(b => b.BorrowStatus).IsRequired().HasConversion<string>();
 
             entity.HasOne(b => b.User)
                 .WithMany(u => u.Borrowings)
@@ -56,14 +57,6 @@ public class AppDbContext(
                 .WithOne(b => b.Borrowing)
                 .HasForeignKey<Borrowing>(b => b.BookId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasData(
-                new Borrowing {
-                    Id = 1,
-                    UserId = 1,
-                    BookId = 2,
-                    DateCreated = new DateTime(2024, 12, 24),
-                    DateDue = new DateTime(2025, 1, 28) });
         });
     }
 }

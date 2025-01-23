@@ -32,7 +32,7 @@ public class LibController(AppDbContext dbContext) : ControllerBase
         {
             await dbContext.Books.AddAsync(newBook);
             await dbContext.SaveChangesAsync();
-
+            
             return Ok($"{newBook.Title} by {newBook.Author} added successfully");
         }
         catch (Exception e)

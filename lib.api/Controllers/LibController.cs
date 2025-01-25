@@ -1,5 +1,5 @@
-using lib.api.Data;
 using lib.api.Models;
+using lib.api.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,12 +7,12 @@ namespace lib.api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class LibController(AppDbContext dbContext) : ControllerBase
+public class LibController(ILibService libService) : ControllerBase
 {
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetBook(int id)
     {
-        var book = await dbContext.Books.FirstOrDefaultAsync(b => b.Id == id);
+        var book = await libService.GetBookAsync(id);
         if (book == null) return NotFound($"book with id: {id} not found");
 
         return Ok(book);
@@ -22,24 +22,18 @@ public class LibController(AppDbContext dbContext) : ControllerBase
     public async Task<IActionResult> AddBook(
         [FromBody] BookDto book)
     {
-        var newBook = new Book
-        {
+        var newBook = new Book {
             Title = book.Title,
-            Author = book.Author,
-        };
+            Author = book.Author };
 
         try
         {
-            await dbContext.Books.AddAsync(newBook);
-            await dbContext.SaveChangesAsync();
+            var add = await libService.AddBookAsync(newBook);
+            if (add.Equals(0)) return NotFound("book not added");
             
             return Ok($"{newBook.Title} by {newBook.Author} added successfully");
         }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        catch (Exception e) { Console.WriteLine(e); throw; }
     }
 
     [HttpPut("{id:int}")]
@@ -47,17 +41,16 @@ public class LibController(AppDbContext dbContext) : ControllerBase
         int id,
         [FromBody] BookDto book)
     {
-        var bookUpdate = await dbContext.Books.FirstOrDefaultAsync(b => b.Id == id);
-        if (bookUpdate == null) return NotFound($"book with id: {id} not found");
-
-        bookUpdate.Title = book.Title;
-        bookUpdate.Author = book.Author;
-
         try
         {
-            await dbContext.SaveChangesAsync();
-
+            var update = await libService.UpdateBookAsync(id, book.Author, book.Title);
+            if (update.Equals(0)) return NotFound("no update"); //handle same update
+            
             return Ok($"book {id} updated");
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            return NotFound("no update");
         }
         catch (Exception e) { Console.WriteLine(e); throw; }
     }
@@ -67,16 +60,14 @@ public class LibController(AppDbContext dbContext) : ControllerBase
     {
         try
         {
-            var book = new Book { Id = id };
-            dbContext.Books.Attach(book);
-            dbContext.Books.Remove(book);
-            await dbContext.SaveChangesAsync();
-
+            var delete = await libService.DeleteBookAsync(id);
+            if (delete.Equals(0)) return NotFound("no delete");
+            
             return Ok($"book {id} deleted successfully");
         }
         catch (DbUpdateConcurrencyException)
         {
-            return NotFound($"book with id: {id} not found");
+            return NotFound("no delete");
         }
         catch (Exception e) { Console.WriteLine(e); throw; }
     }
@@ -85,28 +76,12 @@ public class LibController(AppDbContext dbContext) : ControllerBase
     public async Task<IActionResult> Borrow(
         [FromBody] BorrowRequest request)
     {
-        var book = await dbContext.Books.FindAsync(request.BookId);
-        if (book == null) return NotFound($"book with id: {request.BookId} not found");
-        if (book.Status == Status.Borrowed) return BadRequest($"{book.Title} is borrowed");
-
-        var user = await dbContext.Users.FindAsync(request.UserId);
-        if (user == null) return NotFound($"user with id: {request.UserId} not found");
-
         try
         {
-            var newBorrowing = new Borrowing
-            {
-                UserId = request.UserId,
-                BookId = request.BookId,
-                DateCreated = DateTime.Now,
-                DateDue = DateTime.Today.AddDays(request.Duration),
-            };
-            book.Status = Status.Borrowed;
+            var borrow = await libService.BorrowBookAsync(request);
+            if (!string.IsNullOrEmpty(borrow)) return NotFound(borrow);
             
-            await dbContext.Borrowings.AddAsync(newBorrowing);
-            await dbContext.SaveChangesAsync();
-
-            return Ok($"user {user.Email} borrowed {book.Title} until {newBorrowing.DateDue}");
+            return Ok("book borrowed successfully");
         }
         catch (Exception e) { Console.WriteLine(e); throw; }
     }
@@ -114,18 +89,12 @@ public class LibController(AppDbContext dbContext) : ControllerBase
     [HttpPut("return/{id:int}")]
     public async Task<IActionResult> Return(int id)
     {
-        var borrowing = await dbContext.Borrowings
-            .Include(b => b.Book)
-            .FirstOrDefaultAsync(b => b.Id == id);
-        if (borrowing == null) return NotFound($"borrowing with id: {id} not found");
-
         try
         {
-            borrowing.Book.Status = Status.Available;
-            borrowing.BorrowStatus = BorrowStatus.Returned;
-            await dbContext.SaveChangesAsync();
-
-            return Ok($"{borrowing.Book.Title} returned");
+            var returnBook = await libService.ReturnBookAsync(id);
+            if (returnBook.Equals(0)) return NotFound("no return");
+            
+            return Ok("book returned");
         }
         catch (Exception e) { Console.WriteLine(e); throw; }
     }

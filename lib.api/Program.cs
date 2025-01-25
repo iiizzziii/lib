@@ -9,6 +9,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // builder.Services.AddSingleton<IEmailService, EmailService>();
 // builder.Services.AddHostedService<NotificationService>();
+builder.Services.AddScoped<ILibService, LibService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 

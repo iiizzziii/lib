@@ -41,10 +41,13 @@ public class LibController(ILibService libService) : ControllerBase
         int id,
         [FromBody] BookDto book)
     {
+        var updateBook = await libService.FindEntityAsync<Book>(id);
+        if (updateBook == null) return NotFound($"book with id: {id} not found");
+        
         try
         {
-            var update = await libService.UpdateBookAsync(id, book.Author, book.Title);
-            if (update.Equals(0)) return NotFound("no update"); //handle same update
+            var update = await libService.UpdateBookAsync(updateBook, book.Author, book.Title);
+            if (update.Equals(0)) return NotFound("no update");
             
             return Ok($"book {id} updated");
         }
@@ -58,9 +61,12 @@ public class LibController(ILibService libService) : ControllerBase
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteBook(int id)
     {
+        var deleteBook = await libService.FindEntityAsync<Book>(id);
+        if (deleteBook == null) return NotFound($"book with id: {id} not found");
+        
         try
         {
-            var delete = await libService.DeleteBookAsync(id);
+            var delete = await libService.DeleteBookAsync(deleteBook);
             if (delete.Equals(0)) return NotFound("no delete");
             
             return Ok($"book {id} deleted successfully");

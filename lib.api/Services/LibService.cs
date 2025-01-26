@@ -6,6 +6,11 @@ namespace lib.api.Services;
 
 public class LibService(AppDbContext dbContext) : ILibService
 {
+    public async Task<T?> FindEntityAsync<T>(int id) where T : class
+    {
+        return await dbContext.Set<T>().FindAsync(id);
+    }
+    
     public async Task<Book?> GetBookAsync(int id)
     {
         return await dbContext.Books.FirstOrDefaultAsync(b => b.Id == id);
@@ -14,24 +19,22 @@ public class LibService(AppDbContext dbContext) : ILibService
     public async Task<int> AddBookAsync(Book book)
     {
         await dbContext.Books.AddAsync(book);
-        return await dbContext.SaveChangesAsync();
-    }
-
-    public async Task<int> UpdateBookAsync(int id, string author, string title)
-    {
-        var book = await dbContext.Books.FindAsync(id);
-        if (book == null) return 0;
-
-        book.Author = author;
-        book.Title = title;
         
         return await dbContext.SaveChangesAsync();
     }
 
-    public async Task<int> DeleteBookAsync(int id)
+    public async Task<int> UpdateBookAsync(Book book, string author, string title)
     {
-        var book = new Book { Id = id };
-        dbContext.Books.Attach(book);
+        book.Author = author;
+        book.Title = title;
+
+        if (!dbContext.Entry(book).Properties.Any(p => p.IsModified)) return 0;
+        
+        return await dbContext.SaveChangesAsync();
+    }
+
+    public async Task<int> DeleteBookAsync(Book book)
+    {
         dbContext.Books.Remove(book);
         
         return await dbContext.SaveChangesAsync();

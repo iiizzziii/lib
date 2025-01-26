@@ -7,5 +7,5 @@ lib.api/Migrations
 lib.api/*.db
 lib.api/*.db*
 .idea/*
-*.DotSettings
-*.DotSettings.user
+lib.sln.DotSettings
+lib.sln.DotSettings.user

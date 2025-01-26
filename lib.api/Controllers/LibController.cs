@@ -82,10 +82,17 @@ public class LibController(ILibService libService) : ControllerBase
     public async Task<IActionResult> Borrow(
         [FromBody] BorrowRequest request)
     {
+        var user = await libService.FindEntityAsync<User>(request.UserId);
+        if (user == null) return NotFound($"user with id: {request.UserId} not found");
+        
+        var book = await libService.FindEntityAsync<Book>(request.BookId);
+        if (book == null) return NotFound($"book with id: {request.BookId} not found");
+        if (book.Status == Status.Borrowed) return Conflict($"book with id: {request.BookId} is borrowed");
+        
         try
         {
-            var borrow = await libService.BorrowBookAsync(request);
-            if (!string.IsNullOrEmpty(borrow)) return NotFound(borrow);
+            var borrow = await libService.BorrowBookAsync(user, book, request.Duration);
+            if (borrow.Equals(0)) return NotFound("book not borrowed");
             
             return Ok("book borrowed successfully");
         }
@@ -95,13 +102,26 @@ public class LibController(ILibService libService) : ControllerBase
     [HttpPut("return/{id:int}")]
     public async Task<IActionResult> Return(int id)
     {
+        var borrowing = await libService.FindBorrowingAsync<Borrowing>(id);
+        if (borrowing == null) return NotFound($"borrowing with id: {id} not found");
+        if (borrowing.BorrowStatus == BorrowStatus.Returned) return Conflict($"already returned");
+        
         try
         {
-            var returnBook = await libService.ReturnBookAsync(id);
+            var returnBook = await libService.ReturnBookAsync(borrowing);
             if (returnBook.Equals(0)) return NotFound("no return");
             
             return Ok("book returned");
         }
         catch (Exception e) { Console.WriteLine(e); throw; }
+    }
+    
+    [HttpGet("user/{id:int}")]
+    public async Task<IActionResult> GetUser(int id)
+    {
+        var user = await libService.GetUserAsync(id);
+        if (user == null) return NotFound($"user with id: {id} not found");
+        
+        return Ok(user);
     }
 }

@@ -10,6 +10,14 @@ public class LibService(AppDbContext dbContext) : ILibService
     {
         return await dbContext.Set<T>().FindAsync(id);
     }
+
+    public async Task<T?> FindBorrowingAsync<T>(int id) where T : Borrowing
+    {
+        return await dbContext.Set<Borrowing>()
+            .Include(b => b.Book)
+            .Include(b => b.User)
+            .FirstOrDefaultAsync(e => e.Id == id) as T;
+    }
     
     public async Task<Book?> GetBookAsync(int id)
     {
@@ -40,36 +48,45 @@ public class LibService(AppDbContext dbContext) : ILibService
         return await dbContext.SaveChangesAsync();
     }
 
-    public async Task<string> BorrowBookAsync(BorrowRequest request)
+    public async Task<int> BorrowBookAsync(User user, Book book, int duration)
     {
-        var user = await dbContext.Users.FindAsync(request.UserId);
-        if (user == null) return $"user with id: {request.UserId} not found";
-        
-        var book = await dbContext.Books.FindAsync(request.BookId);
-        if (book == null) return $"user with id: {request.UserId} not found";
-        if (book.Status == Status.Borrowed) return $"{book.Title} is borrowed";
-        
-        var newBorrowing = new Borrowing {
-            UserId = request.UserId,
-            BookId = request.BookId,
+        var newBorrowing = new Borrowing 
+        {
+            User = user,
+            Book = book,
+            UserId = user.Id,
+            BookId = book.Id,
             DateCreated = DateTime.Now,
-            DateDue = DateTime.Today.AddDays(request.Duration) };
+            DateDue = DateTime.Today.AddDays(duration)
+        };
         book.Status = Status.Borrowed;
-            
+        
         await dbContext.Borrowings.AddAsync(newBorrowing);
-        await dbContext.SaveChangesAsync();
-        return string.Empty;
+        
+        return await dbContext.SaveChangesAsync();
     }
 
-    public async Task<int> ReturnBookAsync(int id)
+    public async Task<int> ReturnBookAsync(Borrowing borrowing)
     {
-        var borrowing = await dbContext.Borrowings
-            .Include(b => b.Book)
-            .FirstOrDefaultAsync(b => b.Id == id);
-        if (borrowing == null) return 0;
-        
         borrowing.Book.Status = Status.Available;
         borrowing.BorrowStatus = BorrowStatus.Returned;
+        
         return await dbContext.SaveChangesAsync();
+    }
+    
+    public async Task<UserDto?> GetUserAsync(int id)
+    {
+        return await dbContext.Users
+            .Where(u => u.Id == id)
+            .Select(u => new UserDto
+            {
+                Id = u.Id,
+                Email = u.Email,
+                ActiveBorrowings = u.Borrowings
+                    .Where(b => b.BorrowStatus == BorrowStatus.Borrowed)
+                    .Select(b => new BorrowingDto {
+                        BookTitle = b.Book.Title,
+                        BookAuthor = b.Book.Author,
+                        DateDue = b.DateDue }).ToList() }).FirstOrDefaultAsync();
     }
 }

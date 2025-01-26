@@ -10,8 +10,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // builder.Services.AddSingleton<IEmailService, EmailService>();
 // builder.Services.AddHostedService<NotificationService>();
 builder.Services.AddScoped<ILibService, LibService>();
-builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddControllers();
+    // .AddJsonOptions(options => {
+    //     options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve; });
 
 var app = builder.Build();
 

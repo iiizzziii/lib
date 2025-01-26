@@ -8,9 +8,7 @@ public class ModelTests
     [Fact]
     public void CreateBookSuccess()
     {
-        var book = new Book {
-            Title = "Tester book",
-            Author = "Johnny Test" };
+        var book = new Book("Tester book", "Johnny Test");
 
         Assert.NotNull(book);
         Assert.NotNull(book.Author);
@@ -24,9 +22,11 @@ public class ModelTests
     [InvalidBookDtoParameters]
     public void CreateBookDtoValidationFailure(string author, string title)
     {
-        var book = new BookDto {
+        var book = new BookDto 
+        {
             Author = author,
-            Title = title };
+            Title = title 
+        };
 
         var validationContext = new ValidationContext(book);
         var validationResult = new List<ValidationResult>();
@@ -37,11 +37,13 @@ public class ModelTests
     [Fact]
     public void CreateBorrowingValidationSuccess()
     {
-        var borrowing = new Borrowing {
+        var borrowing = new Borrowing 
+        {
             UserId = 1,
             BookId = 1,
             DateCreated = DateTime.Now.AddDays(-1),
-            DateDue = DateTime.Now.AddDays(7) };
+            DateDue = DateTime.Now.AddDays(7) 
+        };
 
         var validationContext = new ValidationContext(borrowing);
         var validationResults = borrowing.Validate(validationContext).ToList();
@@ -54,11 +56,13 @@ public class ModelTests
     [Fact]
     public void CreateBorrowingDateTimeValidationFailure()
     {
-        var borrowing = new Borrowing {
+        var borrowing = new Borrowing 
+        {
             UserId = 1,
             BookId = 1,
             DateCreated = DateTime.Now.AddDays(1),
-            DateDue = DateTime.Now.AddDays(-1) };
+            DateDue = DateTime.Now.AddDays(-1) 
+        };
 
         var validationContext = new ValidationContext(borrowing);
         var validationResults = borrowing.Validate(validationContext).ToList();

@@ -20,14 +20,12 @@ public class DbFixture : IDisposable
         
         using (var dbContext = new AppDbContext(Options))
         {
-            dbContext.Database.EnsureDeleted();
             dbContext.Database.EnsureCreated();
-            
             dbContext.AddRange(
-                new User { Id = 11, Email = "testuser1@gmail.com" },
-                new User { Id = 22, Email = "testuser2@gmail.com" },
-                new Book { Id = 11, Title = "Test Book 1", Author = "Test Author 1"},
-                new Book { Id = 22, Title = "Test Book 2", Author = "Test Author 2"});
+                new User { Id = Ids.Id11, Email = "testuser1@gmail.com" },
+                new User { Id = Ids.Id22, Email = "testuser2@gmail.com" },
+                new Book("Test Book 1", "Test Author 1") { Id = Ids.Id11 },
+                new Book("Test Book 1", "Test Author 1") { Id = Ids.Id22 });
 
             dbContext.SaveChanges();
         }

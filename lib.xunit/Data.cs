@@ -1,6 +1,6 @@
-using System.Reflection;
 using lib.api.Models;
 using Xunit.Sdk;
+using System.Reflection;
 
 namespace lib.xunit;
 
@@ -13,6 +13,16 @@ public class InvalidBookDtoParameters : Data
         yield return [string.Empty, string.Empty];
         yield return [null!, null!];
         yield return [new string('A', 51), new string('A', 201)];
+    }
+}
+
+public class EntityTypes : Data
+{
+    public override IEnumerable<object[]> GetData(MethodInfo testMethod)
+    {
+        yield return [typeof(User)];
+        yield return [typeof(Book)];
+        yield return [typeof(Borrowing)];
     }
 }
 

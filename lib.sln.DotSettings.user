@@ -1,22 +1,15 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=2f221740_002D407e_002D4f28_002D941d_002D211eb994a35c/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="CreateBookSuccess" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=2f221740_002D407e_002D4f28_002D941d_002D211eb994a35c/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="CreateBookSuccess" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::588AA4D8-D7ED-41CF-9E7A-4F0206550345::net8.0::lib.xunit.Unit.ModelTests.CreateBookSuccess&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::588AA4D8-D7ED-41CF-9E7A-4F0206550345::net8.0::lib.xunit.Unit.LibraryServiceTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::588AA4D8-D7ED-41CF-9E7A-4F0206550345::net8.0::lib.xunit.Unit.ModelTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::588AA4D8-D7ED-41CF-9E7A-4F0206550345::net8.0::lib.xunit.Integration.BookFullCrudTest.BookCrudSuccess&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::588AA4D8-D7ED-41CF-9E7A-4F0206550345::net8.0::lib.xunit.Integration.BorrowAndReturnTest.BorrowAndReturnSuccess&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=af2b8515_002Da0ad_002D4f3b_002Db496_002D0fc7718711e6/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="UnitTest1" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=af2b8515_002Da0ad_002D4f3b_002Db496_002D0fc7718711e6/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="UnitTest1" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::588AA4D8-D7ED-41CF-9E7A-4F0206550345::net8.0::lib.xunit.BookTests.Test2&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::588AA4D8-D7ED-41CF-9E7A-4F0206550345::net8.0::lib.xunit.BookTests.Test3&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::588AA4D8-D7ED-41CF-9E7A-4F0206550345::net8.0::lib.xunit.Unit.ModelTests.CreateBookSuccess&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::588AA4D8-D7ED-41CF-9E7A-4F0206550345::net8.0::lib.xunit.Unit.ModelTests.CreateBookFailure&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::588AA4D8-D7ED-41CF-9E7A-4F0206550345::net8.0::lib.xunit.Unit.ModelTests.Borrowing_ValidData_ShouldPassValidation&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::588AA4D8-D7ED-41CF-9E7A-4F0206550345::net8.0::lib.xunit.Unit.ModelTests.CreateBorrowingValidationSuccess&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::588AA4D8-D7ED-41CF-9E7A-4F0206550345::net8.0::lib.xunit.Unit.ModelTests.CreateBookDtoValidationFailure&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::588AA4D8-D7ED-41CF-9E7A-4F0206550345::net8.0::lib.xunit.Unit.ModelTests.CreateBorrowingDateTimeValidationFailure&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::588AA4D8-D7ED-41CF-9E7A-4F0206550345::net8.0::lib.xunit.Integration.BookCrudTests.DeleteBookSuccess&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::588AA4D8-D7ED-41CF-9E7A-4F0206550345::net8.0::lib.xunit.Unit.BookCrudTests.DeleteBookSuccess&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::588AA4D8-D7ED-41CF-9E7A-4F0206550345::net8.0::lib.xunit.Unit.BookCrudTests.GetBookSuccess&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::588AA4D8-D7ED-41CF-9E7A-4F0206550345::net8.0::lib.xunit.Unit.BookCrudTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::588AA4D8-D7ED-41CF-9E7A-4F0206550345::net8.0::lib.xunit.Unit.ModelTests&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

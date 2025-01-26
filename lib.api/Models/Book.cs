@@ -3,12 +3,12 @@ using System.Text.Json.Serialization;
 
 namespace lib.api.Models;
 
-public class Book
+public class Book(string title, string author)
 {
     [Key]
     public int Id { get; init; }
-    public string Title { get; set; }
-    public string Author { get; set; }
+    public string Title { get; set; } = title;
+    public string Author { get; set; } = author;
     public Status Status { get; set; } = Status.Available;
     public ICollection<Borrowing> Borrowings { get; set; }
 }

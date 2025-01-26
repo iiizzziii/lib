@@ -19,7 +19,8 @@ public class AppDbContext(
             entity.Property(u => u.Email).IsRequired();
             entity.HasData( 
                 new User { Id = 1, Email = "janko@gmail.com" },
-                new User { Id = 2, Email = "ferko@gmail.com" });
+                new User { Id = 2, Email = "ferko@gmail.com" }
+                );
         });
 
         modelBuilder.Entity<Book>(entity =>
@@ -29,16 +30,9 @@ public class AppDbContext(
             entity.Property(b => b.Author).IsRequired();
             entity.Property(b => b.Status).IsRequired().HasConversion<string>();
             entity.HasData(
-                new Book {
-                    Id = 1,
-                    Title = "Book 1",
-                    Author = "Author 1",
-                    Status = Status.Available, },
-                new Book {
-                    Id = 2,
-                    Title = "Book 2",
-                    Author = "Author 2",
-                    Status = Status.Available, });
+                new Book(title: "Book 1", author: "Author 1") { Id = 1 },
+                new Book(title: "Book 2", author: "Author 2") { Id = 2 }
+                );
         });
 
         modelBuilder.Entity<Borrowing>(entity =>

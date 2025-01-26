@@ -22,9 +22,7 @@ public class LibController(ILibService libService) : ControllerBase
     public async Task<IActionResult> AddBook(
         [FromBody] BookDto book)
     {
-        var newBook = new Book {
-            Title = book.Title,
-            Author = book.Author };
+        var newBook = new Book(book.Title, book.Author);
 
         try
         {
@@ -47,7 +45,7 @@ public class LibController(ILibService libService) : ControllerBase
         try
         {
             var update = await libService.UpdateBookAsync(updateBook, book.Author, book.Title);
-            if (update.Equals(0)) return NotFound("no update");
+            if (update.Equals(0)) return NotFound("no update, same title and author as before");
             
             return Ok($"book {id} updated");
         }
@@ -112,6 +110,10 @@ public class LibController(ILibService libService) : ControllerBase
             if (returnBook.Equals(0)) return NotFound("no return");
             
             return Ok("book returned");
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            return NotFound("book return not successful");
         }
         catch (Exception e) { Console.WriteLine(e); throw; }
     }

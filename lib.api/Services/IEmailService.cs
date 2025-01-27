@@ -2,5 +2,5 @@ namespace lib.api.Services;
 
 public interface IEmailService
 {
-    void SendEmail(string to, string subject, string body);
+    Task SendEmail(string to, string body);
 }
